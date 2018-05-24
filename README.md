@@ -67,9 +67,9 @@ Creates an object of which prototype is `ArithNumber`.
 
 If *value* is a string, this function supports following notations:
 
-* `123`, `-45`, `+678`
-* `12.3`, `-.45`
-* `123e+45`, `-6.789E-12`
+* `'123'`, `'-45'`, `'+678'`
+* `'12.3'`, `'-.45'`
+* `'123e+45'`, `'-6.789E-12'`
 
 #### Parameters:
 
@@ -85,7 +85,7 @@ A number object of which prototype is `ArithNumber`.
 ### <u>ArithNumber</u>
 
 Represents a number, and its instance consists of three integers: *numerator*, *denominator*, *exponent*.
-(a number = *numerator* / *denominator* * 10^*exponent* ).
+(a number = ( *numerator* / *denominator* ) * 10^*exponent* ).
 
 Arithmetics in program often causes rounding error.
 However, integer operations except division is accurate as long as the integer value is within safe range. (`Number.MIN_SAFE_INTEGER` 〜 `Number.MAX_SAFE_INTEGER` in Javascript).
@@ -104,8 +104,8 @@ If each element is out of its safe range, the value of `ArithNumber` object is i
 
 For the `ArithNumber` object, it is more important that this object is accurate or not than infinity or NaN. Therefore this prototype provides the methods: `.isAccurate`.
 
-This prototype also provides methods: `.toApproximateString`.
-Since the conversion to a `string` data is not always accurate, this method can take *decimalPlace* and a *rounding* function as parameters.
+This prototype also provide a method: `.toApproximateString`.
+Since the conversion to a `string` is not always accurate, this method can take *decimalPlaces* and a *rounding* function as parameters.
 
 **Methods:**
 
@@ -119,23 +119,25 @@ True, if the value of the `ArithNumber` object is accurate.
 
 **Type:** boolean
 
-#### <u>.toApproximateString([decimalPlace, [rounding]]) : string</u>
+#### <u>.toApproximateString([decimalPlaces, [rounding]]) : string</u>
 
 Gets a string of this number value.
-If *numerator* can not be divided by *denominator*, the result string is approximate and the maximum decimal place is 20. (round down 21th place).
+If *numerator* can not be divided by *denominator*, the result string is approximate and the maximum decimal places is 20. (round down 21th place).
 
-When a parameter *decimalPlace* is specified, this function always output decimal until the specified place, and in addition a parameter *rounding* is specified, this function rounds up or down the next of the specified place.
+When a parameter *decimalPlaces* is specified, this function always output decimal until the specified place, and in addition a parameter *rounding* is specified, this function rounds up or down the next of the specified place.
 
 ##### Parameters:
 
 | Paramerter     |  Type  | Description                             |
 |:---------------|:------:|:----------------------------------------|
-| *decimalPlace* | number | The fixed decimal place.                |
-| *rounding*     |function| The rounding function to round the next of *decimalPlace* place. |
+| *decimalPlaces*| number | The fixed decimal places.               |
+| *rounding*     |function| The rounding function to round the next of *decimalPlaces* place. |
 
 ##### Returns:
 
 A string of an approximate number value of this object.
+
+**Type:** string
 
 ## Checked                                                                      
 
