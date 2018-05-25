@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "max-statements": ["error", 85],
+  }
+}
