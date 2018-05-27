@@ -12,7 +12,7 @@ Creates a number for accurate arithmetics.
 To install from npm:
 
 ```sh
-$ npm install --save @fav/arith.number.
+$ npm install --save @fav/arith.number
 ```
 
 ***NOTE:*** *npm < 2.7.0 does not support scoped package, but old version Node.js supports it. So when you use such older npm, you should download this package from [github.com][repo-url], and move it in `node_modules/@fav/arith.number/` directory manually.*
