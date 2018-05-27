@@ -27,4 +27,6 @@ function arithNumber(value) {
   return new ArithNumber(NaN, NaN, NaN);
 }
 
+arithNumber.ArithNumber = ArithNumber;
+
 module.exports = arithNumber;

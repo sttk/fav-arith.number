@@ -72,4 +72,46 @@ describe('lib/number-class', function() {
 
   it.skip('Does not care when arguments are not integers');
 
+  it('.MAX_SAFE_NUMERATOR', function() {
+    expect(ArithNumber.MAX_SAFE_NUMERATOR).to.equal(9007199254740991);
+  });
+
+  it('.MAX_SAFE_DENOMINATOR', function() {
+    expect(ArithNumber.MAX_SAFE_DENOMINATOR).to.equal(900719925474099);
+  });
+
+  it('.MAX_SAFE_EXPONENT', function() {
+    expect(ArithNumber.MAX_SAFE_EXPONENT).to.equal(9007199254740975);
+  });
+
+  it('.isSafeNumerator', function() {
+    expect(ArithNumber.isSafeNumerator(0)).to.equal(true);
+
+    expect(ArithNumber.isSafeNumerator(9007199254740991)).to.equal(true);
+    expect(ArithNumber.isSafeNumerator(-9007199254740991)).to.equal(true);
+
+    expect(ArithNumber.isSafeNumerator(9007199254740992)).to.equal(false);
+    expect(ArithNumber.isSafeNumerator(-9007199254740992)).to.equal(false);
+  });
+
+  it('.isSafeDenominator', function() {
+    expect(ArithNumber.isSafeDenominator(0)).to.equal(false);
+
+    expect(ArithNumber.isSafeDenominator(900719925474099)).to.equal(true);
+    expect(ArithNumber.isSafeDenominator(1)).to.equal(true);
+
+    expect(ArithNumber.isSafeDenominator(900719925474100)).to.equal(false);
+    expect(ArithNumber.isSafeDenominator(0)).to.equal(false);
+    expect(ArithNumber.isSafeDenominator(-1)).to.equal(false);
+  });
+
+  it('.isSafeExponent', function() {
+    expect(ArithNumber.isSafeExponent(0)).to.equal(true);
+
+    expect(ArithNumber.isSafeExponent(9007199254740975)).to.equal(true);
+    expect(ArithNumber.isSafeExponent(-9007199254740975)).to.equal(true);
+
+    expect(ArithNumber.isSafeExponent(9007199254740976)).to.equal(false);
+    expect(ArithNumber.isSafeExponent(-9007199254740976)).to.equal(false);
+  });
 });

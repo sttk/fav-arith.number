@@ -28,32 +28,11 @@ function arithNumber(value) {
   return new ArithNumber(NaN, NaN, NaN);
 }
 
+arithNumber.ArithNumber = ArithNumber;
+
 module.exports = arithNumber;
 
-},{"./lib/from-string":5,"./lib/number-class":6,"./lib/to-string":8,"@fav/type.is-finite-number":20,"@fav/type.is-string":22}],2:[function(require,module,exports){
-'use strict';
-
-var MAX_SAFE_NUMERATOR = Math.pow(2, 53) - 1;           // 9007199254740991
-var MAX_SAFE_DENOMINATOR = (Math.pow(2, 53) - 2) / 10;  // 900719925474099
-var MAX_SAFE_EXPONENT = Math.pow(2, 53) - 17;           // 9007199254740975
-
-exports.MAX_SAFE_NUMERATOR   = MAX_SAFE_NUMERATOR;
-exports.MAX_SAFE_DENOMINATOR = MAX_SAFE_DENOMINATOR;
-exports.MAX_SAFE_EXPONENT    = MAX_SAFE_EXPONENT;
-
-exports.isSafeNumerator = function(i) {
-  return (-MAX_SAFE_NUMERATOR <= i) && (i <= MAX_SAFE_NUMERATOR);
-};
-
-exports.isSafeDenominator = function(i) {
-  return (0 < i) && (i <= MAX_SAFE_DENOMINATOR);
-};
-
-exports.isSafeExponent = function(i) {
-  return (-MAX_SAFE_EXPONENT <= i) && (i <= MAX_SAFE_EXPONENT);
-};
-
-},{}],3:[function(require,module,exports){
+},{"./lib/from-string":4,"./lib/number-class":5,"./lib/to-string":7,"@fav/type.is-finite-number":19,"@fav/type.is-string":21}],2:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -146,7 +125,7 @@ function exponentialToString(intString, exponent, decimalPlaces, rounding) {
 
 module.exports = exponentialToString;
 
-},{"./round":7,"@fav/text.pad-left":16,"@fav/text.repeat":18,"@fav/text.trim-right":19}],4:[function(require,module,exports){
+},{"./round":6,"@fav/text.pad-left":15,"@fav/text.repeat":17,"@fav/text.trim-right":18}],3:[function(require,module,exports){
 'use strict';
 
 var padLeft = require('@fav/text.pad-left');
@@ -196,13 +175,12 @@ function fractionToString(numerator, denominator, exponent, decimalPlaces,
 
 module.exports = fractionToString;
 
-},{"./exp-to-string":3,"@fav/text.pad-left":16}],5:[function(require,module,exports){
+},{"./exp-to-string":2,"@fav/text.pad-left":15}],4:[function(require,module,exports){
 'use strict';
 
 /*eslint max-len: ["error", { "ignoreRegExpLiterals": true }]*/
 
 var ArithNumber = require('./number-class');
-var accuracy = require('./accuracy');
 var trimRight = require('@fav/text.trim-right');
 
 function fromString(valueString) {
@@ -250,12 +228,12 @@ function fromString(valueString) {
   }
 
   var denominator = 1;
-  if (exponent < -accuracy.MAX_SAFE_EXPONENT) {
-    var diff1 = -accuracy.MAX_SAFE_EXPONENT - exponent;
+  if (exponent < -ArithNumber.MAX_SAFE_EXPONENT) {
+    var diff1 = -ArithNumber.MAX_SAFE_EXPONENT - exponent;
     exponent = exponent + diff1;
     denominator = Math.pow(10, diff1);
-  } else if (exponent > accuracy.MAX_SAFE_EXPONENT) {
-    var diff2 = exponent - accuracy.MAX_SAFE_EXPONENT;
+  } else if (exponent > ArithNumber.MAX_SAFE_EXPONENT) {
+    var diff2 = exponent - ArithNumber.MAX_SAFE_EXPONENT;
     exponent = exponent - diff2;
     numerator *= Math.pow(10, diff2);
   }
@@ -265,15 +243,13 @@ function fromString(valueString) {
 
 module.exports = fromString;
 
-},{"./accuracy":2,"./number-class":6,"@fav/text.trim-right":19}],6:[function(require,module,exports){
+},{"./number-class":5,"@fav/text.trim-right":18}],5:[function(require,module,exports){
 'use strict';
 
-var accuracy = require('./accuracy');
-
 function ArithNumber(numerator, denominator, exponent) {
-  if (!accuracy.isSafeNumerator(numerator) ||
-      !accuracy.isSafeDenominator(denominator) ||
-      !accuracy.isSafeExponent(exponent)) {
+  if (!ArithNumber.isSafeNumerator(numerator) ||
+      !ArithNumber.isSafeDenominator(denominator) ||
+      !ArithNumber.isSafeExponent(exponent)) {
     numerator = denominator = exponent = NaN;
   }
 
@@ -290,10 +266,51 @@ ArithNumber.prototype.isAccurate = function() {
   return !isNaN(this.numerator);
 };
 
+Object.defineProperties(ArithNumber, {
+
+  MAX_SAFE_NUMERATOR: {
+    enumerable: true,
+    value: 9007199254740991, // = MAX_SAFE_INTEGER
+  },
+
+  MAX_SAFE_DENOMINATOR: {
+    enumerable: true,
+    value: 900719925474099,  // = MAX_SAFE_INTEGER / 10
+  },
+
+  MAX_SAFE_EXPONENT: {
+    enumerable: true,
+    value: 9007199254740975, // = MAX_SAFE_INTEGER - 17
+  },
+
+  isSafeNumerator: {
+    enumerable: true,
+    value: function(i) {
+      return (i >= -ArithNumber.MAX_SAFE_NUMERATOR) &&
+             (i <=  ArithNumber.MAX_SAFE_NUMERATOR);
+    },
+  },
+
+  isSafeDenominator: {
+    enumerable: true,
+    value: function(i) {
+      return (i > 0) &&
+             (i <= ArithNumber.MAX_SAFE_DENOMINATOR);
+    },
+  },
+
+  isSafeExponent: {
+    enumerable: true,
+    value: function(i) {
+      return (i >= -ArithNumber.MAX_SAFE_EXPONENT) &&
+             (i <=  ArithNumber.MAX_SAFE_EXPONENT);
+    },
+  },
+});
 
 module.exports = ArithNumber;
 
-},{"./accuracy":2}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 var isFunction = require('@fav/type.is-function');
@@ -333,7 +350,7 @@ function round(numberStr, roundPlace, roundFn) {
 
 module.exports = round;
 
-},{"@fav/type.is-function":21}],8:[function(require,module,exports){
+},{"@fav/type.is-function":20}],7:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -372,7 +389,7 @@ function zeroToString(decimalPlaces) {
 
 module.exports = toString;
 
-},{"./exp-to-string":3,"./frac-to-string":4,"@fav/text.repeat":18}],9:[function(require,module,exports){
+},{"./exp-to-string":2,"./frac-to-string":3,"@fav/text.repeat":17}],8:[function(require,module,exports){
 'use strict';
 
 var regexp = require('./lib/regexp');
@@ -395,7 +412,7 @@ Object.defineProperties(escape, {
 
 module.exports = escape;
 
-},{"./lib/create/by-preposition":10,"./lib/create/by-replacement":11,"./lib/html-attribute":12,"./lib/html-entity":13,"./lib/regexp":15,"./lib/regexp-charclass":14}],10:[function(require,module,exports){
+},{"./lib/create/by-preposition":9,"./lib/create/by-replacement":10,"./lib/html-attribute":11,"./lib/html-entity":12,"./lib/regexp":14,"./lib/regexp-charclass":13}],9:[function(require,module,exports){
 'use strict';
 
 var escapeRegexpCharClass = require('../regexp-charclass');
@@ -414,7 +431,7 @@ function createEscapingByPreposition(escapingChar, escapedChars) {
 
 module.exports = createEscapingByPreposition;
 
-},{"../regexp-charclass":14}],11:[function(require,module,exports){
+},{"../regexp-charclass":13}],10:[function(require,module,exports){
 'use strict';
 
 var escapeRegexpCharClass = require('../regexp-charclass');
@@ -436,7 +453,7 @@ function createEscapingByReplacement(escapingMap) {
 
 module.exports = createEscapingByReplacement;
 
-},{"../regexp-charclass":14}],12:[function(require,module,exports){
+},{"../regexp-charclass":13}],11:[function(require,module,exports){
 'use strict';
 
 var create = require('./create/by-replacement');
@@ -449,7 +466,7 @@ module.exports = create({
   '\'': '&apos;',
 });
 
-},{"./create/by-replacement":11}],13:[function(require,module,exports){
+},{"./create/by-replacement":10}],12:[function(require,module,exports){
 'use strict';
 
 var create = require('./create/by-replacement');
@@ -462,7 +479,7 @@ module.exports = create({
   '\n': '<br/>',
 });
 
-},{"./create/by-replacement":11}],14:[function(require,module,exports){
+},{"./create/by-replacement":10}],13:[function(require,module,exports){
 'use strict';
 
 function regexpCharClass(source) {
@@ -471,7 +488,7 @@ function regexpCharClass(source) {
 
 module.exports = regexpCharClass;
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 function regexp(source) {
@@ -480,7 +497,7 @@ function regexp(source) {
 
 module.exports = regexp;
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 var padLeft;
@@ -496,7 +513,7 @@ if (!Boolean(String.prototype.padStart)) {
 
 module.exports = padLeft;
 
-},{"./lib/pad-left":17}],17:[function(require,module,exports){
+},{"./lib/pad-left":16}],16:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -519,7 +536,7 @@ function padLeft(source, length, padding) {
 
 module.exports = padLeft;
 
-},{"@fav/text.repeat":18}],18:[function(require,module,exports){
+},{"@fav/text.repeat":17}],17:[function(require,module,exports){
 'use strict';
 
 function repeat(source, ntimes) {
@@ -540,7 +557,7 @@ function repeat(source, ntimes) {
 
 module.exports = repeat;
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 var escape = require('@fav/text.escape').RegExpCharClass;
@@ -559,7 +576,7 @@ function trimRight(source, chars) {
 
 module.exports = trimRight;
 
-},{"@fav/text.escape":9}],20:[function(require,module,exports){
+},{"@fav/text.escape":8}],19:[function(require,module,exports){
 'use strict';
 
 function isFiniteNumber(value) {
@@ -583,7 +600,7 @@ Object.defineProperty(isFiniteNumber, 'not', {
 
 module.exports = isFiniteNumber;
 
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 function isFunction(value) {
@@ -601,7 +618,7 @@ Object.defineProperty(isFunction, 'not', {
 
 module.exports = isFunction;
 
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 function isString(value) {

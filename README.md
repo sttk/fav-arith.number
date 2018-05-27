@@ -140,6 +140,72 @@ A string of an approximate number value of this object.
 
 **Type:** string
 
+**Static Parameters And Methods:**
+
+#### <u>.MAX&#95;SAFE&#95;NUMERATOR</u>
+
+Is the maximum safe integer of an absolute numerator of an ArithNumber object.
+
+This specific value is `9007199254740991` and this equals to `Number.MAX_SAFE_INTEGER` (= 2^53 - 1).
+
+#### <u>.MAX&#95;SAFE&#95;DENOMINATOR</u>
+
+Is the maximum safe integer of an absolute denominator of an ArithNumber object.
+
+This specific value is `900719925474099` and this equals to (`Number.MAX_SAFE_INTEGER` - 1) / 10.
+
+#### <u>.MAX&#95;SAFE&#95;EXPONENT</u>
+
+Is the maximum safe integer of an absolute numerator of an ArithNumber object.
+
+This specific value is `9007199254740975` and this equals to `Number.MAX_SAFE_INTEGER` - `String(Number.MAX_SAFE_INTEGER).length`.
+####
+
+#### <u>.isSafeNumerator(value) : boolean</u>
+
+Checks whether the *value* is within the range between `-ArithNumber.MAX_SAFE_NUMERATOR` and `ArithNumber.MAX_SAFE_NUMERATOR`
+
+##### Parameter:
+
+| Paramerter |  Type  | Description                             |
+|:-----------|:------:|:----------------------------------------|
+| *value*    | number | An integer value to be checked.         |
+
+##### Returns:
+
+True, if the *value* is within the safe range of numerator.
+
+**Type:** boolean
+
+#### <u>.isSafeDenominator(value) : boolean</u>
+
+Checks whether the *value* is within the range between 1 and `ArithNumber.MAX_SAFE_DENOMINATOR`
+
+##### Parameter:
+
+| Paramerter |  Type  | Description                             |
+|:-----------|:------:|:----------------------------------------|
+| *value*    | number | An integer value to be checked.         |
+
+##### Returns:
+
+True, if the *value* is within the safe range of denominator.
+
+#### <u>.isSafeExponent(value) : boolean</u>
+
+Checks whether the *value* is within the range between `-ArithNumber.MAX_SAFE_EXPONENT` and `ArithNumber.MAX_SAFE_EXPONENT`
+
+##### Parameter:
+
+| Paramerter |  Type  | Description                             |
+|:-----------|:------:|:----------------------------------------|
+| *value*    | number | An integer value to be checked.         |
+
+##### Returns:
+
+True, if the *value* is within the safe range of denominator.
+
+
 ## Checked                                                                      
 
 ### Node.js (4〜)
