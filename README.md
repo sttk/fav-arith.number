@@ -75,7 +75,8 @@ If *value* is a string, this function supports following notations:
 
 | Parameter |  Type                                   | Description                            |
 |:----------|:---------------------------------------:|:---------------------------------------|
-| *value*   | number &#124; string &#124; ArithNumber | A number value or its string notation. |
+| *value*   | number &#124; string &#124; ArithNumber | A number value or its string notation, or an ArithNumber object. |
+
 #### Returns:
 
 A number object of which prototype is `ArithNumber`.
