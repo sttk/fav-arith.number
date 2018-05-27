@@ -23,15 +23,15 @@ $ npm install --save @fav/arith.number.
 For Node.js:
 
 ```js
-var arithNumber = require('@fav/arith.number');
+var ArithNumber = require('@fav/arith.number');
 var add = require('@fav/arith.add');
 
-var num1 = arithNumber(1.23) // => { numerator: 123, denominator: 1, exponent: -2 }
+var num1 = ArithNumber.of(1.23) // => { numerator: 123, denominator: 1, exponent: -2 }
 num1.toApproximateString() // => '1.23'
 num1.toApproximateString(1) // => '1.2'
 num1.toApproximateString(1, Math.ceil) // => '1.3'
 
-var num2 = arithNumber('4.56') // => { numerator: 456, denominator: 1, exponent: -2 }
+var num2 = ArithNumber.of('4.56') // => { numerator: 456, denominator: 1, exponent: -2 }
 num2.toApproximateString() // => '4.56'
 num2.toApproximateString(1) // => '4.5'
 num2.toApproximateString(1, Math.ceil) // => '4.6'
@@ -49,8 +49,8 @@ For Web browsers:
 ```html
 <script src="fav.arith.number.min.js"></script>
 <script>
-var arithNumber = fav.arith.number;
-var num1 = arithNumber(1.23) // => { numerator: 123, denominator: 1, exponent: -2 }
+var ArithNumber = fav.arith.number;
+var num1 = ArithNumber.of(1.23) // => { numerator: 123, denominator: 1, exponent: -2 }
 num1.toApproximateString() // => '1.23'
 num1.toApproximateString(1) // => '1.2'
 num1.toApproximateString(1, Math.ceil) // => '1.3'
@@ -59,29 +59,6 @@ num1.toApproximateString(1, Math.ceil) // => '1.3'
 
 
 ## API
-
-### <u>arithNumber(value) : ArithNumber</u>
-
-Creates an object of which prototype is `ArithNumber`.
-`ArithNumber` represents a number and consists of three integers: numerator, denominator and exponent.
-
-If *value* is a string, this function supports following notations:
-
-* `'123'`, `'-45'`, `'+678'`
-* `'12.3'`, `'-.45'`
-* `'123e+45'`, `'-6.789E-12'`
-
-#### Parameters:
-
-| Parameter |  Type                                   | Description                            |
-|:----------|:---------------------------------------:|:---------------------------------------|
-| *value*   | number &#124; string &#124; ArithNumber | A number value or its string notation, or an ArithNumber object. |
-
-#### Returns:
-
-A number object of which prototype is `ArithNumber`.
-
-**Type:** `ArithNumber`
 
 ### <u>ArithNumber</u>
 
@@ -108,7 +85,8 @@ For the `ArithNumber` object, it is more important that this object is accurate 
 This prototype also provide a method: `.toApproximateString`.
 Since the conversion to a `string` is not always accurate, this method can take *decimalPlaces* and a *rounding* function as parameters.
 
-**Methods:**
+
+**<i>Methods:</i>**
 
 #### <u>.isAccurate() : boolean</u>
 
@@ -140,7 +118,29 @@ A string of an approximate number value of this object.
 
 **Type:** string
 
-**Static Parameters And Methods:**
+**<i>Static Parameters And Methods:</i>**
+
+#### <u>.of(value) : ArithNumber</u>
+
+Creates an `ArithNumber` object from a number, a string, or another `ArithNumber` object.
+
+If *value* is a string, this function supports following notations:
+
+* `'123'`, `'-45'`, `'+678'`
+* `'12.3'`, `'-.45'`
+* `'123e+45'`, `'-6.789E-12'`
+
+#### Parameters:
+
+| Parameter |  Type                                   | Description                            |
+|:----------|:---------------------------------------:|:---------------------------------------|
+| *value*   | number &#124; string &#124; ArithNumber | A number value or its string notation, or an ArithNumber object. |
+
+#### Returns:
+
+A new `ArithNumber` object.
+
+**Type:** `ArithNumber`
 
 #### <u>.MAX&#95;SAFE&#95;NUMERATOR</u>
 

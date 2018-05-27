@@ -12,7 +12,7 @@ ArithNumber.prototype.toApproximateString = function(decimalPlace, rounding) {
   return toString(this, decimalPlace, rounding);
 };
 
-function arithNumber(value) {
+ArithNumber.of = function(value) {
   if (value instanceof ArithNumber) {
     return new ArithNumber(value.numerator, value.denominator, value.exponent);
   }
@@ -26,11 +26,9 @@ function arithNumber(value) {
   }
 
   return new ArithNumber(NaN, NaN, NaN);
-}
+};
 
-arithNumber.ArithNumber = ArithNumber;
-
-module.exports = arithNumber;
+module.exports = ArithNumber;
 
 },{"./lib/from-string":4,"./lib/number-class":5,"./lib/to-string":7,"@fav/type.is-finite-number":19,"@fav/type.is-string":21}],2:[function(require,module,exports){
 'use strict';

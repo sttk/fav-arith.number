@@ -11,7 +11,7 @@ ArithNumber.prototype.toApproximateString = function(decimalPlace, rounding) {
   return toString(this, decimalPlace, rounding);
 };
 
-function arithNumber(value) {
+ArithNumber.of = function(value) {
   if (value instanceof ArithNumber) {
     return new ArithNumber(value.numerator, value.denominator, value.exponent);
   }
@@ -25,8 +25,6 @@ function arithNumber(value) {
   }
 
   return new ArithNumber(NaN, NaN, NaN);
-}
+};
 
-arithNumber.ArithNumber = ArithNumber;
-
-module.exports = arithNumber;
+module.exports = ArithNumber;
