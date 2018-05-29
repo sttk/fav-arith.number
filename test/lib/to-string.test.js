@@ -66,4 +66,9 @@ describe('lib/to-string', function() {
     anum = new ArithNumber(-1, 3, 0);
     expect(toString(anum)).to.equal('-0.33333333333333333333');
   });
+
+  it('Should convert to a string when be inaccurate', function() {
+    var anum = new ArithNumber(NaN, NaN, NaN);
+    expect(toString(anum)).to.equal('NaN');
+  });
 });
