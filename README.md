@@ -62,7 +62,7 @@ num1.toApproximateString(1, Math.ceil) // => '1.3'
 
 ### <u>ArithNumber</u>
 
-Represents a number, and its instance consists of three integers: *numerator*, *denominator*, *exponent*.
+Represents a number, and this instance consists of three integers: *numerator*, *denominator*, *exponent*.
 (a number = ( *numerator* / *denominator* ) * 10^*exponent* ).
 
 Arithmetics in program often causes rounding error.
@@ -78,7 +78,7 @@ The safe ranges of the three elements are as follows:
 | *denominator*      | 1 〜 900719925474099   | `1` 〜 `Number.MAX_SAFE_INTEGER/10` |
 | *exponent*         | -9007199254740975 〜 9007199254740975 |`Number.MIN_SAFE_INTEGER` - `String(Number.MIN_SAFE_INTEGER).length` 〜 `Number.MAX_SAFE_INTEGER` - `String(Number.MAX_SAFE_INTEGER).length` |
 
-If each element is out of its safe range, the value of `ArithNumber` object is inaccurate. But it does not mean that the `ArithNumber` object is infinity, because `9007199254740992e+0` is less than `9007199254740991e+1`. So `ArithNumber` prototype does not provide any methods for infinity like `.isFinite`.
+If one of elements is out of its safe range, the value of `ArithNumber` object is inaccurate. But it does not mean that the `ArithNumber` object is infinity, because `9007199254740992e+0` is less than `9007199254740991e+1`. So `ArithNumber` prototype does not provide any methods for infinity like `.isInfinite` or `.isFinite`.
 
 For the `ArithNumber` object, it is more important that this object is accurate or not than infinity or NaN. Therefore this prototype provides the methods: `.isAccurate`.
 

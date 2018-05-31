@@ -70,6 +70,25 @@ describe('lib/number-class', function() {
     expect(arithNum.isAccurate()).to.equal(false);
   });
 
+  it('Should always denominator == 1 and exponent == 0 when numerator == 0',
+  function() {
+    var a;
+    a = new ArithNumber(0, 1, 100);
+    expect(a.numerator).to.equal(0);
+    expect(a.denominator).to.equal(1);
+    expect(a.exponent).to.equal(0);
+
+    a = new ArithNumber(0, 1000, 0);
+    expect(a.numerator).to.equal(0);
+    expect(a.denominator).to.equal(1);
+    expect(a.exponent).to.equal(0);
+
+    a = new ArithNumber(0, 100, 10);
+    expect(a.numerator).to.equal(0);
+    expect(a.denominator).to.equal(1);
+    expect(a.exponent).to.equal(0);
+  });
+
   it.skip('Does not care when arguments are not integers');
 
   it('.MAX_SAFE_NUMERATOR', function() {

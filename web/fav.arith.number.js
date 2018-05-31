@@ -251,6 +251,11 @@ function ArithNumber(numerator, denominator, exponent) {
     numerator = denominator = exponent = NaN;
   }
 
+  if (numerator === 0) {
+    denominator = 1;
+    exponent = 0;
+  }
+
   Object.defineProperties(this, {
     numerator:   { enumerable: true, value: numerator   },
     denominator: { enumerable: true, value: denominator },
