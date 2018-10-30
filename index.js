@@ -1,8 +1,7 @@
 'use strict';
 
 var isString = require('@fav/type.is-string');
-var isFiniteNumber = require('@fav/type.is-finite-number');
-
+var isInteger = require('@fav/type.is-integer');
 var ArithNumber = require('./lib/number-class');
 var fromString = require('./lib/from-string');
 var toString = require('./lib/to-string');
@@ -16,15 +15,15 @@ ArithNumber.of = function(value) {
     return new ArithNumber(value.numerator, value.denominator, value.exponent);
   }
 
-  if (isFiniteNumber(value)) {
-    return fromString(String(value));
+  if (isInteger(value)) {
+    return new ArithNumber(value, 1, 0);
   }
 
   if (isString(value)) {
     return fromString(value);
   }
 
-  return new ArithNumber(NaN, NaN, NaN);
+  return fromString(String(value));
 };
 
 module.exports = ArithNumber;

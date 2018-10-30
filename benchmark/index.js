@@ -1,10 +1,8 @@
 'use strict';
 
 var BenchmarkTester = require('benchmark-tester');
-var chai = require('chai');
-var expect = chai.expect;
 
-var tester = new BenchmarkTester()
+new BenchmarkTester()
   .addTest('@fav/arith.number', function(ArithNumber, data) {
     return new ArithNumber(data[0], data[1], 0);
   })

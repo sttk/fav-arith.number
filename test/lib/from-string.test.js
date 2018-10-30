@@ -383,6 +383,18 @@ describe('lib/from-string', function() {
       expect(anum.isAccurate()).to.equal(true);
     });
 
+    it('Should convert to an accurate number (12)', function() {
+      var anum = fromString('12300.00456');
+      expect(anum).to.deep.equal(new ArithNumber(1230000456, 1, -5));
+      expect(anum.isAccurate()).to.equal(true);
+    });
+
+    it('Should convert to an accurate number (13)', function() {
+      var anum = fromString('+00012300.00456000');
+      expect(anum).to.deep.equal(new ArithNumber(1230000456, 1, -5));
+      expect(anum.isAccurate()).to.equal(true);
+    });
+
     it('Should convert to an inaccurate number (1)', function() {
       var anum = fromString('90071992.54740992');
       expect(anum.isAccurate()).to.equal(false);
@@ -473,6 +485,18 @@ describe('lib/from-string', function() {
       var anum = fromString('-9.007199254740991e-9007199254740974');
       expect(anum).to.deep.equal(new ArithNumber(-9007199254740991,
         100000000000000, -9007199254740975));
+      expect(anum.isAccurate()).to.equal(true);
+    });
+
+    it('Should convert to an accurate number (12)', function() {
+      var anum = fromString('-98700.00654');
+      expect(anum).to.deep.equal(new ArithNumber(-9870000654, 1, -5));
+      expect(anum.isAccurate()).to.equal(true);
+    });
+
+    it('Should convert to an accurate number (13)', function() {
+      var anum = fromString('-0000098700.0065400000');
+      expect(anum).to.deep.equal(new ArithNumber(-9870000654, 1, -5));
       expect(anum.isAccurate()).to.equal(true);
     });
 

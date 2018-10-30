@@ -2,8 +2,7 @@
 'use strict';
 
 var isString = require('@fav/type.is-string');
-var isFiniteNumber = require('@fav/type.is-finite-number');
-
+var isInteger = require('@fav/type.is-integer');
 var ArithNumber = require('./lib/number-class');
 var fromString = require('./lib/from-string');
 var toString = require('./lib/to-string');
@@ -17,20 +16,20 @@ ArithNumber.of = function(value) {
     return new ArithNumber(value.numerator, value.denominator, value.exponent);
   }
 
-  if (isFiniteNumber(value)) {
-    return fromString(String(value));
+  if (isInteger(value)) {
+    return new ArithNumber(value, 1, 0);
   }
 
   if (isString(value)) {
     return fromString(value);
   }
 
-  return new ArithNumber(NaN, NaN, NaN);
+  return fromString(String(value));
 };
 
 module.exports = ArithNumber;
 
-},{"./lib/from-string":4,"./lib/number-class":5,"./lib/to-string":7,"@fav/type.is-finite-number":19,"@fav/type.is-string":21}],2:[function(require,module,exports){
+},{"./lib/from-string":4,"./lib/number-class":5,"./lib/to-string":7,"@fav/type.is-integer":20,"@fav/type.is-string":21}],2:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -179,47 +178,48 @@ module.exports = fractionToString;
 /*eslint max-len: ["error", { "ignoreRegExpLiterals": true }]*/
 
 var ArithNumber = require('./number-class');
-var trimRight = require('@fav/text.trim-right');
 
 function fromString(valueString) {
-  var result = /^([-+]?)(?:0*([1-9][0-9]*)?)?(?:\.([0-9]*[1-9])?0*)?(?:[eE]([-+])0*([1-9][0-9]*))?$/.exec(valueString);
+  var result = /^([-+]?)([0-9]*[1-9])?(0*)(?:\.(0*)([0-9]*[1-9])?(0*))?(?:[eE]([-+][0-9]*))?$/.exec(valueString);
   if (!result) {
     return new ArithNumber(NaN, NaN, NaN);
   }
 
   var sign = result[1];
   var numerator = result[2];
-  var decimal = result[3];
-  var expSign = result[4];
-  var exponent = result[5];
+  var decimal = result[5];
+  var exponent = result[7];
 
   if (exponent) {
     exponent = parseInt(exponent, 10);
-    if (expSign === '-') {
-      exponent = -exponent;
-    }
   } else {
     exponent = 0;
   }
 
-  if (!numerator) {
-    if (!decimal) {
-      if (/^[-+]?(0+|\.0+)/.test(valueString)) {
-        return new ArithNumber(0, 1, 0);
-      } else {
-        return new ArithNumber(NaN, NaN, NaN);
-      }
+  if (numerator && decimal) {
+    if (result[3]) {
+      numerator += result[3];
     }
-    numerator = decimal;
-    exponent -= decimal.length;
-  } else if (!decimal) {
-    var trimmed = trimRight(numerator, '0');
-    exponent += numerator.length - trimmed.length;
-    numerator = trimmed;
-  } else {
+    if (result[4]) {
+      numerator += result[4];
+      exponent -= result[4].length;
+    }
     numerator += decimal;
     exponent -= decimal.length;
+  } else if (numerator) {
+    if (result[3]) {
+      exponent += result[3].length;
+    }
+  } else if (decimal) {
+    numerator = decimal;
+    exponent -= decimal.length;
+    if (result[4]) {
+      exponent -= result[4].length;
+    }
+  } else if (result[3] || result[4]) {
+    return new ArithNumber(0, 1, 0);
   }
+
   numerator = parseInt(numerator, 10);
   if (sign === '-') {
     numerator = -numerator;
@@ -241,7 +241,7 @@ function fromString(valueString) {
 
 module.exports = fromString;
 
-},{"./number-class":5,"@fav/text.trim-right":18}],5:[function(require,module,exports){
+},{"./number-class":5}],5:[function(require,module,exports){
 'use strict';
 
 function ArithNumber(numerator, denominator, exponent) {
@@ -256,11 +256,9 @@ function ArithNumber(numerator, denominator, exponent) {
     exponent = 0;
   }
 
-  Object.defineProperties(this, {
-    numerator:   { enumerable: true, value: numerator   },
-    denominator: { enumerable: true, value: denominator },
-    exponent:    { enumerable: true, value: exponent    },
-  });
+  this.numerator = numerator;
+  this.denominator = denominator;
+  this.exponent = exponent;
 
   return this;
 }
@@ -353,7 +351,7 @@ function round(numberStr, roundPlace, roundFn) {
 
 module.exports = round;
 
-},{"@fav/type.is-function":20}],7:[function(require,module,exports){
+},{"@fav/type.is-function":19}],7:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -586,30 +584,6 @@ module.exports = trimRight;
 },{"@fav/text.escape":8}],19:[function(require,module,exports){
 'use strict';
 
-function isFiniteNumber(value) {
-  if (typeof value === 'number') {
-    return isFinite(value);
-  }
-  if (Object.prototype.toString.call(value) === '[object Number]') {
-    return isFinite(value);
-  }
-  return false;
-}
-
-function isNotFiniteNumber(value) {
-  return !isFiniteNumber(value);
-}
-
-Object.defineProperty(isFiniteNumber, 'not', {
-  enumerable: true,
-  value: isNotFiniteNumber,
-});
-
-module.exports = isFiniteNumber;
-
-},{}],20:[function(require,module,exports){
-'use strict';
-
 function isFunction(value) {
   return (typeof value === 'function');
 }
@@ -624,6 +598,41 @@ Object.defineProperty(isFunction, 'not', {
 });
 
 module.exports = isFunction;
+
+},{}],20:[function(require,module,exports){
+'use strict';
+
+function isInteger(value) {
+  if (typeof value === 'number') {
+    return checkInteger(value);
+  }
+  if (Object.prototype.toString.call(value) === '[object Number]') {
+    return checkInteger(Number(value));
+  }
+  return false;
+}
+
+function checkInteger(num) {
+  /* istanbul ignore if */
+  if (typeof Number.isInteger !== 'function') {
+    if (!isFinite(num)) {
+      return false;
+    }
+    return (num < 0 ? Math.ceil(num) : Math.floor(num)) === num;
+  }
+  return Number.isInteger(num);
+}
+
+function isNotInteger(value) {
+  return !isInteger(value);
+}
+
+Object.defineProperty(isInteger, 'not', {
+  enumerable: true,
+  value: isNotInteger,
+});
+
+module.exports = isInteger;
 
 },{}],21:[function(require,module,exports){
 'use strict';
