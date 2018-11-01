@@ -11,6 +11,7 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha test test/lib",
+    "benchmark": "node benchmark/index.js",
     "coverage": "nyc --reporter=lcov --reporter=text-summary npm test",
     "coveralls": "nyc --reporter=text-lcov npm test | coveralls",
     "web:build": "npm run web:build-src && npm run web:build-test",
@@ -40,15 +41,15 @@
   "homepage": "https://github.com/sttk/fav-arith.number#readme",
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "benchmark-tester": "^0.1.0",
+    "benchmark-tester": "^0.2.0",
     "browserify": "^16.1.0",
     "chai": "^3.5.0",
     "coveralls": "^3.0.0",
-    "eslint": "^4.8.0",
+    "eslint": "^5.8.0",
     "fraction.js": "^4.0.10",
     "lodash": "^4.17.11",
     "mocha": "^3.5.3",
-    "nyc": "^11.2.1",
+    "nyc": "^13.1.0",
     "platform": "^1.3.5",
     "uglify-js": "^3.1.3"
   },
