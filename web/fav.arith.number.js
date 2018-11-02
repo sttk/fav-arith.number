@@ -29,7 +29,7 @@ ArithNumber.of = function(value) {
 
 module.exports = ArithNumber;
 
-},{"./lib/from-string":4,"./lib/number-class":5,"./lib/to-string":7,"@fav/type.is-integer":12,"@fav/type.is-string":13}],2:[function(require,module,exports){
+},{"./lib/from-string":4,"./lib/number-class":5,"./lib/to-string":7,"@fav/type.is-integer":13,"@fav/type.is-string":14}],2:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -125,12 +125,13 @@ function exponentialToString(intString, exponent, decimalPlaces, rounding) {
 
 module.exports = exponentialToString;
 
-},{"./round":6,"@fav/text.pad-left":8,"@fav/text.repeat":10}],3:[function(require,module,exports){
+},{"./round":6,"@fav/text.pad-left":9,"@fav/text.repeat":11}],3:[function(require,module,exports){
 'use strict';
 
 var ArithNumber = require('./number-class');
 var exponentialToString = require('./exp-to-string');
 var padLeft = require('@fav/text.pad-left');
+var log10 = require('@fav/math.log10');
 
 function fractionToString(numerator, denominator, exponent, decimalPlaces,
     rounding) {
@@ -149,7 +150,7 @@ function fractionToString(numerator, denominator, exponent, decimalPlaces,
     var addedPlace = 0;
     var ratio = ArithNumber.MAX_SAFE_NUMERATOR / numerator;
     if (ratio > 10) {
-      addedPlace = Math.max(Math.floor(Math.log10(ratio)), 1);
+      addedPlace = Math.max(Math.floor(log10(ratio)), 1);
       numerator *= Math.pow(10, addedPlace);
     }
 
@@ -174,7 +175,7 @@ function fractionToString(numerator, denominator, exponent, decimalPlaces,
 
 module.exports = fractionToString;
 
-},{"./exp-to-string":2,"./number-class":5,"@fav/text.pad-left":8}],4:[function(require,module,exports){
+},{"./exp-to-string":2,"./number-class":5,"@fav/math.log10":8,"@fav/text.pad-left":9}],4:[function(require,module,exports){
 'use strict';
 
 /*eslint max-len: ["error", { "ignoreRegExpLiterals": true }]*/
@@ -353,7 +354,7 @@ function round(numberStr, roundPlace, roundFn) {
 
 module.exports = round;
 
-},{"@fav/type.is-function":11}],7:[function(require,module,exports){
+},{"@fav/type.is-function":12}],7:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -396,7 +397,14 @@ function zeroToString(decimalPlaces) {
 
 module.exports = toString;
 
-},{"./exp-to-string":2,"./frac-to-string":3,"@fav/text.repeat":10}],8:[function(require,module,exports){
+},{"./exp-to-string":2,"./frac-to-string":3,"@fav/text.repeat":11}],8:[function(require,module,exports){
+'use strict';
+
+module.exports = Math.log10 || /* istanbul ignore next */ function(x) {
+  return Math.log(x) * Math.LOG10E;
+};
+
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var padLeft;
@@ -412,7 +420,7 @@ if (!Boolean(String.prototype.padStart)) {
 
 module.exports = padLeft;
 
-},{"./lib/pad-left":9}],9:[function(require,module,exports){
+},{"./lib/pad-left":10}],10:[function(require,module,exports){
 'use strict';
 
 var repeat = require('@fav/text.repeat');
@@ -435,7 +443,7 @@ function padLeft(source, length, padding) {
 
 module.exports = padLeft;
 
-},{"@fav/text.repeat":10}],10:[function(require,module,exports){
+},{"@fav/text.repeat":11}],11:[function(require,module,exports){
 'use strict';
 
 function repeat(source, ntimes) {
@@ -456,7 +464,7 @@ function repeat(source, ntimes) {
 
 module.exports = repeat;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 function isFunction(value) {
@@ -474,7 +482,7 @@ Object.defineProperty(isFunction, 'not', {
 
 module.exports = isFunction;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 function isInteger(value) {
@@ -509,7 +517,7 @@ Object.defineProperty(isInteger, 'not', {
 
 module.exports = isInteger;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 function isString(value) {
